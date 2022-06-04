@@ -9,6 +9,7 @@ class Car{
         // instead of directly mainpulating the position of the car we can use speed and acceleration to create
         // the illusion of inertia and friction
         this.speed = 0;
+        this.strafe = 0;
         this.acceleration = 0.2;
         this.maxSpeed = 3;
         this.friction = 0.05;
@@ -17,32 +18,67 @@ class Car{
     }
 
     update(){
-        // on webpages (0,0) is the top left corner so moving -2 in y moves the car up the page
-        if(this.controls.forward){
-            this.speed += this.acceleration;
-        }else if(this.controls.backward){
-            this.speed -= this.acceleration;
+        this.updateY();
+        this.updateX();
+    }
+
+    updateY(){
+    // on webpages (0,0) is the top left corner so moving -2 in y moves the car up the page
+    if(this.controls.forward){
+        this.speed += this.acceleration;
+    }else if(this.controls.backward){
+        this.speed -= this.acceleration;
+    }
+
+    // cap the speed of the car
+    if (this.speed>this.maxSpeed){
+        this.speed = this.maxSpeed;
+    } else if (this.speed< -this.maxSpeed/2){
+        this.speed = -this.maxSpeed/2;
+    }
+
+    // simulates friction this will cause the car to decelerate when a direction is not being pressed
+    if (this.speed>0){
+        this.speed -= this.friction;
+    }else if (this.speed<0){
+        this.speed += this.friction;
+    }
+
+    // full stop when force < friction
+    if(Math.abs(this.speed)<this.friction) {
+        this.speed = 0;
+    }
+    // update y position based on speed (in px) of the car 
+    this.y -= this.speed;
+    }
+
+    updateX(){
+        // this method is the exact same as updateY() except it deals with the X axis, updates this.strafe
+        if(this.controls.left){
+            this.strafe += this.acceleration;
+        }else if(this.controls.right){
+            this.strafe -= this.acceleration;
         }
 
-        // cap the speed of the car
-        if (this.speed>this.maxSpeed){
-            this.speed = this.maxSpeed;
-        } else if (this.speed< -this.maxSpeed/2){
-            this.speed = -this.maxSpeed/2;
+        // strafe speed is capped at 1/2 of forward speed
+        if(this.strafe > this.maxSpeed/2){
+            this.strafe = this.maxSpeed/2;
+        }else if(this.strafe < -this.maxSpeed/2){
+            this.strafe = -this.maxSpeed/2;
         }
 
-        // simulates friction this will cause the car to decelerate when a direction is not being pressed
-        if (this.speed>0){
-            this.speed -= this.friction;
-        }else if (this.speed<0){
-            this.speed += this.friction;
+        //friction is the same because physics
+        if (this.strafe>0){
+            this.strafe -= this.friction;
+        }else if (this.strafe<0){
+            this.strafe += this.friction;
         }
 
         if(Math.abs(this.speed)<this.friction) {
             this.speed = 0;
         }
-        // update y position based on speed (in px) of the car 
-        this.y -= this.speed;
+
+        this.x -= this.strafe;
     }
 
     draw(ctx){
