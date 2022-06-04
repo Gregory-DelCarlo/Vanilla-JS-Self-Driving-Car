@@ -11,7 +11,7 @@ const car = new Car(road.getLaneCenter(1),400,40,60);
 animate();
 
 function animate(){
-    car.update();
+    car.update(road.borders);
     canvas.height = window.innerHeight;
 
     // adds camera like effect to follow the car

@@ -19,10 +19,10 @@ class Car{
         this.controls = new Controls();
     }
 
-    update(){
+    update(roadBorders){
         this.#updateY();
         this.#updateX();
-        this.sensor.update();
+        this.sensor.update(roadBorders); // pass boarder informatio from main to the sensors through the car
     }
 
     #updateY(){
