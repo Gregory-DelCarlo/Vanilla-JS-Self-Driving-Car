@@ -9,6 +9,15 @@ class Car{
         this.controls = new Controls();
     }
 
+    update(){
+        // on webpages (0,0) is the top left corner so moving -2 in y moves the car up the page
+        if(this.controls.forward){
+            this.y-=2;
+        }else if(this.controls.backward){
+            this.y+=2;
+        }
+    }
+
     draw(ctx){
         ctx.beginPath();
         ctx.fillRect(
