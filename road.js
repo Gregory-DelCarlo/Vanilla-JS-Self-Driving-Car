@@ -13,6 +13,14 @@ class Road{
         this.bottom = infinity;
     }
 
+    getLaneCenter(laneIdx){
+        const laneWidth = this.width/this.laneCount;
+
+        return ( this.left +
+                            laneWidth/2 + // start in the middle of the first lane
+                                            laneIdx*laneWidth ) // move to the center lane
+    }
+
 
     draw(ctx){
         ctx.lineWidth=5;

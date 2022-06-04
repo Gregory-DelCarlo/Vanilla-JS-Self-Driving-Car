@@ -6,7 +6,7 @@ canvas.width=300;
 
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width/2, canvas.width*0.9);
-const car = new Car(100,400,40,60);
+const car = new Car(road.getLaneCenter(1),400,40,60);
 
 animate();
 
