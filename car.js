@@ -15,12 +15,14 @@ class Car{
         // zero being straight ahead this creates a variable we can use as a unit circle to rotate the car
         this.angle = 0;
 
+        this.sensor = new Sensor(this); // pass this object to it's Sensor object
         this.controls = new Controls();
     }
 
     update(){
         this.#updateY();
         this.#updateX();
+        this.sensor.update();
     }
 
     #updateY(){
@@ -89,6 +91,8 @@ class Car{
         );
 
         ctx.restore();
+
+        this.sensor.draw(ctx);
     }
 
     
