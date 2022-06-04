@@ -4,7 +4,7 @@ class Controls {
         this.backward = false;
         this.left = false;
         this.right = false;
-
+        //listen whenever this class is intialized
         this.#addKeyboardListeners();
     }
 

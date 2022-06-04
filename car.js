@@ -9,20 +9,21 @@ class Car{
         // instead of directly mainpulating the position of the car we can use speed and acceleration to create
         // the illusion of inertia and friction
         this.speed = 0;
-        this.strafe = 0;
         this.acceleration = 0.2;
         this.maxSpeed = 3;
         this.friction = 0.05;
+        // zero being straight ahead this creates a variable we can use as a unit circle to rotate the car
+        this.angle = 0;
 
         this.controls = new Controls();
     }
 
     update(){
-        this.updateY();
-        this.updateX();
+        this.#updateY();
+        this.#updateX();
     }
 
-    updateY(){
+    #updateY(){
     // on webpages (0,0) is the top left corner so moving -2 in y moves the car up the page
     if(this.controls.forward){
         this.speed += this.acceleration;
@@ -48,48 +49,48 @@ class Car{
     if(Math.abs(this.speed)<this.friction) {
         this.speed = 0;
     }
-    // update y position based on speed (in px) of the car 
-    this.y -= this.speed;
+    // moderate speed based on direction + amount the car is travelling left or right
+    // basically as the angle of the car increases the acceleration forward is decreased
+    // this stops the car from being able to move faster than it should when traveling at an angle
+    this.y -= Math.cos(this.angle)*this.speed;
     }
 
-    updateX(){
-        // this method is the exact same as updateY() except it deals with the X axis, updates this.strafe
+    #updateX(){
+        // basic check to see which direction we are moving and change steering if needed
+        const flip = this.speed>0?1:-1;
+        // rotates the car 3 degrees along its unit circle
+        // instead of just moving the car left and right this will make the car "drive" in different directions
         if(this.controls.left){
-            this.strafe += this.acceleration;
+            this.angle+=0.03*flip;
         }else if(this.controls.right){
-            this.strafe -= this.acceleration;
+            this.angle-=0.03*flip;
         }
 
-        // strafe speed is capped at 1/2 of forward speed
-        if(this.strafe > this.maxSpeed/2){
-            this.strafe = this.maxSpeed/2;
-        }else if(this.strafe < -this.maxSpeed/2){
-            this.strafe = -this.maxSpeed/2;
-        }
-
-        //friction is the same because physics
-        if (this.strafe>0){
-            this.strafe -= this.friction;
-        }else if (this.strafe<0){
-            this.strafe += this.friction;
-        }
-
-        if(Math.abs(this.speed)<this.friction) {
-            this.speed = 0;
-        }
-
-        this.x -= this.strafe;
+        // update x based on the angle use sine to get a value 0-1 and scale by speed
+        // basically as the angle of the car increases the speed traveled left or right
+        // changes without pushing the vehicle passed its max speed
+        this.x -= Math.sin(this.angle)*this.speed
     }
 
     draw(ctx){
+        ctx.save();
+        // tell the context where to center the rotation (the center of our car)
+        ctx.translate(this.x, this.y);
+        // rotate the car
+        ctx.rotate(-this.angle)
+
         ctx.beginPath();
         ctx.fillRect(
-            //sets the origin points to the center of the rectangle's size
-            this.x-this.width/2,
-            this.y-this.height/2,
+            //sets the origin points to the center of the rectangle's size and draw out
+            -this.width/2,
+            -this.height/2,
             this.width,
             this.height
         );
+
+        ctx.restore();
     }
+
+    
 }
 
