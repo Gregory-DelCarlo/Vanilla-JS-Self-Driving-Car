@@ -26,23 +26,22 @@ class Car{
         // this.color = colors[1];
     }
 
-    update(roadBorders){
+    update(roadBorders, traffic){
         if(!this.damaged){ // the car cannot move if damaged
             this.#updateY();
             this.#updateX();
             this.polygon = this.#createPolygon(); // generates polygon of the car rather than basic rectangle
-            this.damaged = this.#assessDamage(roadBorders); // asses whether or not damage should be applied
+            this.damaged = this.#assessDamage(roadBorders, traffic); // asses whether or not damage should be applied
         }
 
         if(this.sensor){
-            this.sensor.update(roadBorders); // pass boarder informatio from main to the sensors through the car
+            this.sensor.update(roadBorders, traffic); // pass boarder information from main to the sensors through the car
         }
     }
 
-    #assessDamage(roadBorders){
-        return roadBorders.some(border => ( polysIntersect(this.polygon,border) )); 
-                                                                    // returns true when the block returns true
-
+    #assessDamage(roadBorders,traffic){
+        return roadBorders.some(border => ( polysIntersect(this.polygon,border) )) || // returns true when the block returns true
+                traffic.some(car => ( polysIntersect(this.polygon, car.polygon) ));
         // the above is a simplified version of this
         // for(let i=0;i<roadBorders.length;i++){
         //     if(polysIntersect(this.polygon,roadBorders[i])){
