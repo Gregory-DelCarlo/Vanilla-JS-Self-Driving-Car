@@ -3,8 +3,8 @@ class Sensor{
     constructor(car){
         this.car = car;
         this.rayCount=15;  // these will be our sensor that "reach out"
-        this.rayLength=450;  //sets the length that our sensors "reach out" from the car
-        this.raySpread = Math.PI; // sets the spread along the unit circle of the car (45 dg)
+        this.rayLength=250;  //sets the length that our sensors "reach out" from the car
+        this.raySpread = Math.PI * 2; // sets the spread along the unit circle of the car (45 dg)
 
         this.rays = []; // will hold all of the individual arrays
         this.readings = [];
