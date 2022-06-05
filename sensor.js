@@ -3,7 +3,7 @@ class Sensor{
     constructor(car){
         this.car = car;
         this.rayCount=15;  // these will be our sensor that "reach out"
-        this.rayLength=350;  //sets the length that our sensors "reach out" from the car
+        this.rayLength=450;  //sets the length that our sensors "reach out" from the car
         this.raySpread = Math.PI; // sets the spread along the unit circle of the car (45 dg)
 
         this.rays = []; // will hold all of the individual arrays
@@ -64,9 +64,9 @@ class Sensor{
             // const minOffset=Math.min(...offsets); // find the smallest offset
             // return touches.find(touch => touch.offset == minOffset); // return the closest touch
 
-            //better. only loops through the touches once instead of three times
-            return touches.reduce((least, touch)=> {
-                touch.offset <= least ? least = touch.offset : least;
+            //better maybe? better yes. single loop through our ray touches rather than 3
+            return touches.reduce((least, touch) => {
+                return touch.offset < least.offset ? least = touch : least;
             });
         }
     }
@@ -119,8 +119,4 @@ class Sensor{
             ctx.stroke();
         }
     }
-}
-
-function closest(least, touch) {
-    return touch.offset <= least ? least = touch.offset : least;
 }
