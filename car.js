@@ -22,10 +22,12 @@ class Car{
     }
 
     update(roadBorders){
-        this.#updateY();
-        this.#updateX();
-        this.polygon = this.#createPolygon(); // generates polygon of the car rather than basic rectangle
-        this.damaged = this.#assessDamage(roadBorders); // asses whether or not damage should be applied
+        if(!this.damaged){ // the car cannot move if damaged
+            this.#updateY();
+            this.#updateX();
+            this.polygon = this.#createPolygon(); // generates polygon of the car rather than basic rectangle
+            this.damaged = this.#assessDamage(roadBorders); // asses whether or not damage should be applied
+        }
         this.sensor.update(roadBorders); // pass boarder informatio from main to the sensors through the car
     }
 
