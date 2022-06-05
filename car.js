@@ -17,8 +17,13 @@ class Car{
         // zero being straight ahead this creates a variable we can use as a unit circle to rotate the car
         this.angle = 0;
 
+        this.useBrain = controlType=="AI";
+
         if (controlType != "NPC"){ // equip car with sensors if it is the playable car
             this.sensor = new Sensor(this); // pass this object to it's Sensor object
+            this.brain = new NeuralNetwork(
+                [this.sensor.rayCount, 6, 4]
+            );
         }
         this.controls = new Controls(controlType);
 
@@ -36,6 +41,20 @@ class Car{
 
         if(this.sensor){
             this.sensor.update(roadBorders, traffic); // pass boarder information from main to the sensors through the car
+            const offsets = this.sensor.readings.map(s=>s==null?0:1-s.offset); // recieve lower values if the object is far
+                                                                                // and higher values when it is closer
+
+            const outputs = NeuralNetwork.feedForward(offsets, this.brain); // procs the neural network to calculate outputs
+                                                                            // using the information given from the sensors
+
+            console.log(outputs);
+
+            if (this.useBrain){
+                this.controls.forward = outputs[0];
+                this.controls.backward = outputs[1];
+                this.controls.left = outputs[2];
+                this.controls.right = outputs[3];
+            }
         }
     }
 

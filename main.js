@@ -6,7 +6,7 @@ canvas.width=300;
 
 const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width/2, canvas.width*0.9);
-const car = new Car(road.getLaneCenter(1),400,40,60, "PC"); //need to specify between npc and pc cars
+const car = new Car(road.getLaneCenter(1),400,40,60, "AI"); //need to specify between npc and pc cars
 const traffic = [
     new Car(road.getLaneCenter(1), -100, 40, 60, "NPC", 2),
 ]  //eventually I want to update this to be all cars and deal with traffic within cars
