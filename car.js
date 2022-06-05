@@ -59,7 +59,7 @@ class Car{
 
     #updateX(){
         // basic check to see which direction we are moving and change steering if needed
-        const flip = this.speed>0?1:-1;
+        const flip = this.speed>=0?1:-1;
         // rotates the car 3 degrees along its unit circle
         // instead of just moving the car left and right this will make the car "drive" in different directions
         if(this.controls.left){
