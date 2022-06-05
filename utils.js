@@ -25,3 +25,23 @@ function getIntersection(A,B,C,D){
 
     return null;
 }
+
+// finds an intersection of two polygons (or polygon and segment)
+function polysIntersect(poly1, poly2){
+    //basic nest loop checks one segment of poly1 against all segments of poly2 until it finds an intersection
+    // n^2 we can make this faster
+    for(let i =0;i<poly1.length;i++){
+        for(let j = 0; j<poly2.length;j++){ // we don't start at the index of I because we are comparing to seperate polys
+            const touch = getIntersection(
+                poly1[i],
+                poly1[(i+1) % poly1.length], //if its the last point "connect" it to the initial point
+                poly2[j],
+                poly2[(j+1) % poly2.length],
+            );
+
+            if(touch){return true}; // break the loop and return true as soon as we find an intersection
+        }
+    }
+
+    return false;
+}

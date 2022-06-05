@@ -12,6 +12,8 @@ class Car{
         this.acceleration = 0.2;
         this.maxSpeed = 3;
         this.friction = 0.05;
+        this.damaged=false;
+
         // zero being straight ahead this creates a variable we can use as a unit circle to rotate the car
         this.angle = 0;
 
@@ -23,9 +25,23 @@ class Car{
         this.#updateY();
         this.#updateX();
         this.polygon = this.#createPolygon(); // generates polygon of the car rather than basic rectangle
+        this.damaged = this.#assessDamage(roadBorders); // asses whether or not damage should be applied
         this.sensor.update(roadBorders); // pass boarder informatio from main to the sensors through the car
     }
 
+    #assessDamage(roadBorders){
+        return roadBorders.some(border => ( polysIntersect(this.polygon,border) )); 
+                                                                    // returns true when the block returns true
+
+        // the above is a simplified version of this
+        // for(let i=0;i<roadBorders.length;i++){
+        //     if(polysIntersect(this.polygon,roadBorders[i])){
+        //         return true;
+        //     }
+        // }
+
+        // return false;
+    }
 
     #createPolygon(){
         const points=[]; // will get a set of points, 1 for each corner of our car
@@ -134,6 +150,13 @@ class Car{
         // );
 
         // ctx.restore();
+
+        // color change for damaged status
+        if(this.damaged){
+            ctx.fillStyle="gray";
+        }else{
+            ctx.fillStyle="red";
+        }
 
         ctx.beginPath();
         ctx.moveTo(this.polygon[0].x,this.polygon[0].y) // polygon will contain an array of points to connect
