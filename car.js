@@ -41,7 +41,7 @@ class Car{
         // add first point
         points.push({
             x: this.x-Math.sin(this.angle-hAngle)*rad,  //more fancy circle math that adjusts points location based on cars rotation
-            y: this.y-Math.cos(this.angle-hAngle)*rad   // rotates the coordinate right along the unit circle
+            y: this.y-Math.cos(this.angle-hAngle)*rad,   // rotates the coordinate right along the unit circle
         }); // this returns the top right corner of the car
 
         // add second point
