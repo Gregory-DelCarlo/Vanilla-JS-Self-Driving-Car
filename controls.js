@@ -1,11 +1,18 @@
 class Controls {
-    constructor() {
+    constructor(type) {
         this.forward = false;
         this.backward = false;
         this.left = false;
         this.right = false;
         //listen whenever this class is intialized
-        this.#addKeyboardListeners();
+        switch(type){
+            case "PC":
+                this.#addKeyboardListeners();
+                break;
+            case "NPC":
+                this.forward = true;
+                break;
+        }
     }
 
     // create private method to listen for keyboard input

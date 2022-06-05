@@ -1,5 +1,5 @@
 class Car{
-    constructor(x,y,width,height){
+    constructor(x,y,width,height, controlType, maxSpeed = 3){
         // stores information about itself (position, and size)
         this.x = x;
         this.y = y;
@@ -10,15 +10,20 @@ class Car{
         // the illusion of inertia and friction
         this.speed = 0;
         this.acceleration = 0.2;
-        this.maxSpeed = 3;
+        this.maxSpeed = maxSpeed;
         this.friction = 0.05;
         this.damaged=false;
 
         // zero being straight ahead this creates a variable we can use as a unit circle to rotate the car
         this.angle = 0;
 
-        this.sensor = new Sensor(this); // pass this object to it's Sensor object
-        this.controls = new Controls();
+        if (controlType != "NPC"){ // equip car with sensors if it is the playable car
+            this.sensor = new Sensor(this); // pass this object to it's Sensor object
+        }
+        this.controls = new Controls(controlType);
+
+        this.color = this.#getRandomColor();
+        // this.color = colors[1];
     }
 
     update(roadBorders){
@@ -28,7 +33,10 @@ class Car{
             this.polygon = this.#createPolygon(); // generates polygon of the car rather than basic rectangle
             this.damaged = this.#assessDamage(roadBorders); // asses whether or not damage should be applied
         }
-        this.sensor.update(roadBorders); // pass boarder informatio from main to the sensors through the car
+
+        if(this.sensor){
+            this.sensor.update(roadBorders); // pass boarder informatio from main to the sensors through the car
+        }
     }
 
     #assessDamage(roadBorders){
@@ -134,6 +142,17 @@ class Car{
         this.x -= Math.sin(this.angle)*this.speed
     }
 
+    #getRandomColor(){
+        const hexChar = "0123456789ABCDEF".split('');
+
+        let color = '#';
+        for(let i=0;i<6;i++){
+            color += hexChar[Math.floor(Math.random() * hexChar.length)];
+        };
+
+        return color;
+    }
+
     draw(ctx){
         // bad practice: does not store coordinates of the edges of the car
         // ctx.save();
@@ -157,7 +176,7 @@ class Car{
         if(this.damaged){
             ctx.fillStyle="gray";
         }else{
-            ctx.fillStyle="red";
+            ctx.fillStyle=`${this.color}`;
         }
 
         ctx.beginPath();
@@ -173,8 +192,9 @@ class Car{
         });
 
         ctx.fill();
-
-        this.sensor.draw(ctx);
+        if(this.sensor){
+            this.sensor.draw(ctx);
+        }
     }
 
     
