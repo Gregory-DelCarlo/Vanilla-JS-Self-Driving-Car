@@ -112,9 +112,9 @@ class Car{
 
     #updateY(){
     // on webpages (0,0) is the top left corner so moving -2 in y moves the car up the page
-    if(this.controls.forward){
+    if(this.controls.forward && !this.controls.backward){
         this.speed += this.acceleration;
-    }else if(this.controls.backward){
+    }else if(this.controls.backward && !this.controls.forward){
         this.speed -= this.acceleration;
     }
 
@@ -148,9 +148,9 @@ class Car{
             const flip = this.speed>0?1:-1;
             // rotates the car 3 degrees along its unit circle
             // instead of just moving the car left and right this will make the car "drive" in different directions
-            if(this.controls.left){
+            if(this.controls.left && !this.controls.right){
                 this.angle+=0.03*flip;
-            }else if(this.controls.right){
+            }else if(this.controls.right && !this.controls.left){
                 this.angle-=0.03*flip;
             }
         }
