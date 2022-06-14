@@ -40,12 +40,21 @@ function animate(time){
         cars[i].update(road.borders, traffic);
     }
 
+    // find the most interesting car (the furthest driving car)
+    const bestCar = cars.find( //find the first element that returns true in the block
+                                c => c.y==Math.min(  //is y the smallest value
+                                                    ...cars.map( // splat the array of the cars y values
+                                                                c=>c.y
+                                                                )
+                                                    )
+                            ); // pretty sure this can be simplified to a single reduce function
+
     carCanvas.height = window.innerHeight;
     networkCanvas.height = window.innerHeight;
 
     // adds camera like effect to follow the car
     carCtx.save();
-    carCtx.translate(0, -cars[0].y+carCanvas.height*0.7); // only follow one car
+    carCtx.translate(0, -bestCar.y+carCanvas.height*0.7); // only follow one car
 
     road.draw(carCtx);
     for(i=0;i<traffic.length;i++){
@@ -53,14 +62,15 @@ function animate(time){
     }
     carCtx.globalAlpha=0.2;
     for(i=0; i<cars.length;i++){
-        cars[i].draw(carCtx);
+        bestCar == cars[i] ? '' : cars[i].draw(carCtx); //simple optimization: don't draw the best car in intial loop
     }
     carCtx.globalAlpha=1;
+    bestCar.draw(carCtx);
 
     carCtx.restore();
 
     networkCtx.lineDashOffset=-time/50; 
-    Visualizer.drawNetwork(networkCtx, cars[0].brain);  //method call to properly visualize the given network
+    Visualizer.drawNetwork(networkCtx, bestCar.brain);  //method call to properly visualize the given network
     // calls this method everytime it finishes
     // allows the illusion of movement
     requestAnimationFrame(animate);
