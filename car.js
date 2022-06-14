@@ -47,9 +47,7 @@ class Car{
             const outputs = NeuralNetwork.feedForward(offsets, this.brain); // procs the neural network to calculate outputs
                                                                             // using the information given from the sensors
 
-            console.log(outputs);
-
-            if (this.useBrain){
+            if (this.useBrain){  //set the controls to the NN output
                 this.controls.forward = outputs[0];
                 this.controls.backward = outputs[1];
                 this.controls.left = outputs[2];
@@ -148,7 +146,7 @@ class Car{
             const flip = this.speed>0?1:-1;
             // rotates the car 3 degrees along its unit circle
             // instead of just moving the car left and right this will make the car "drive" in different directions
-            if(this.controls.left && !this.controls.right){
+            if(this.controls.left && !this.controls.right){ 
                 this.angle+=0.03*flip;
             }else if(this.controls.right && !this.controls.left){
                 this.angle-=0.03*flip;
