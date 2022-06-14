@@ -13,13 +13,31 @@ const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
 const cars = generateCars(100);
+let bestCar = cars[0]; //set the best Car to the first one at start
+
+if(localStorage.getItem("bestBrain")){ // check to see if their is a brain locally stored
+    bestCar.brain=JSON.parse(localStorage.getItem("bestBrain")); // replace random brain with good brain
+}
+
 const traffic = [
     new Car(road.getLaneCenter(1), -100, 40, 60, "NPC", 2),
-]  //eventually I want to update this to be all cars and deal with traffic within cars
-   // this should allow npc cars to crash into eah other and into the pc
+] 
    
 
 animate();
+
+//we need to be able to save the best iteration of each generation somehow so that we can advance AI
+//we can achieve this by serializing the Car object in our local memory
+function save(){
+    localStorage.setItem("bestBrain", JSON.stringify(bestCar.brain));
+}
+
+function discard(){
+    localStorage.removeItem("bestBrain");
+}
+
+
+
 
 function generateCars(genSize){
     const cars = [];
@@ -41,13 +59,14 @@ function animate(time){
     }
 
     // find the most interesting car (the furthest driving car)
-    const bestCar = cars.find( //find the first element that returns true in the block
-                                c => c.y==Math.min(  //is y the smallest value
-                                                    ...cars.map( // splat the array of the cars y values
-                                                                c=>c.y
-                                                                )
-                                                    )
-                            ); // pretty sure this can be simplified to a single reduce function
+    // this is our fitness function (how we push the AI to achieve the results we are looking for)
+    bestCar = cars.find( //find the first element that returns true in the block
+                        c => c.y==Math.min(  //is y the smallest value
+                                            ...cars.map( // splat the array of the cars y values
+                                                        c=>c.y
+                                                        )
+                                            )
+                    ); // pretty sure this can be simplified to a single reduce function
 
     carCanvas.height = window.innerHeight;
     networkCanvas.height = window.innerHeight;
