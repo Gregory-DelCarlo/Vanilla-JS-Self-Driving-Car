@@ -37,3 +37,7 @@ function animate(){
 }
 
 
+// ran into VM problem where the date was wrong
+// adding for new commit on the 3rd day of works correct date
+
+
