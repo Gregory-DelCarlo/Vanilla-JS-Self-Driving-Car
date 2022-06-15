@@ -21,6 +21,8 @@ if(localStorage.getItem("bestBrain")){ // check to see if their is a brain local
 
 const traffic = [
     new Car(road.getLaneCenter(1), -100, 40, 60, "NPC", 2),
+    new Car(road.getLaneCenter(0), -300, 40, 60, "NPC", 2),
+    new Car(road.getLaneCenter(2), -300, 40, 60, "NPC", 2)
 ] 
    
 
