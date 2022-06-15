@@ -12,7 +12,7 @@ const carCtx = carCanvas.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
 const road = new Road(carCanvas.width/2, carCanvas.width*0.9);
-const cars = generateCars(100);
+const cars = generateCars(20);
 let bestCar = cars[0]; //set the best Car to the first one at start
 
 if(localStorage.getItem("bestBrain")){ // check to see if their is a brain locally stored
